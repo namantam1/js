@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xhr</title>
+</head>
+<body>
+    <button onclick="test()">click</button>
+    <script>
+        function test() {
+            console.log('btn click');
+
+            var xhr = new XMLHttpRequest();
+
+            console.log("Hello before open", xhr.readyState)
+
+            xhr.open('GET', "https://jsonplaceholder.typicode.com/posts", true);
+
+            console.log("Hello after open", xhr.readyState)
+            
+            xhr.onload = function() {
+                console.log("on load", this.readyState)
+            }
+            
+            xhr.onprogress = function() {
+                console.log("on progress", this.readyState)
+            }
+            
+            xhr.onloadstart = function() {
+                console.log("load start" ,this.readyState)
+            }
+            
+            xhr.onloadend = function() {
+                console.log("load end" ,this.readyState)
+            }
+
+            // xhr.onreadystatechange = function() {
+            //     console.log(this.readyState)
+            // }
+
+            xhr.send()
+        }
+
+        // readyState Values
+        // 0: request not initiated
+        // 1: server connection established
+        // 2: request recieved
+        // 3: processing request
+        // 4: request finished and response is ready
+    </script>
+</body>
+</html>
