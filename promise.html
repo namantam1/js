@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promises</title>
+</head>
+<body>
+    <button onclick="callbackExample();">callbackExample();</button>
+    <button onclick="promiseExample();">promiseExample();</button>
+    <button onclick="asyncAwaitExample();">asyncAwaitExample();</button>
+    <button onclick="asyncAwaitFetchExample();">asyncAwaitFetchExample();</button>
+    <script>
+        const posts = [
+            {title: "Post 1", body: "This is post 1 body"},
+            {title: "Post 2", body: "This is post 2 body"},
+        ];
+        function callbackExample() {
+            function getPost() {
+                setTimeout(function() {
+                    let output = "";
+                    posts.forEach((post, index) => {
+                        output += `<li>${post.title}</li>`;
+                    });
+                    document.body.innerHTML += output;
+                }, 1000);
+            }
+
+            function createPost(callback) {
+                let post = {title: 'Post 3', body: 'This is post 3 body'}
+                setTimeout(() => {
+                    posts.push(post);
+                    callback()
+                }, 2000);
+            }
+
+            // getPost()
+            createPost(getPost);
+        }
+
+        function promiseExample() {
+            function getPost() {
+                setTimeout(function() {
+                    let output = "";
+                    posts.forEach((post, index) => {
+                        output += `<li>${post.title}</li>`;
+                    });
+                    document.body.innerHTML += output;
+                }, 1000);
+            }
+
+            function createPost(error=false) {
+                let post = {title: 'Post 3', body: 'This is post 3 body'}
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        posts.push(post);
+
+                        if(!error) {
+                            resolve();
+                        } else {
+                            reject('Error: Something went wrong.');
+                        }
+                    }, 2000);
+                });
+            }
+
+            // getPost()
+            createPost(false)
+            .then(getPost)
+            .catch(e => console.log(e));
+        }
+
+        // Async / Await / Promise
+        function asyncAwaitExample() {
+            function getPost() {
+                setTimeout(function() {
+                    let output = "";
+                    posts.forEach((post, index) => {
+                        output += `<li>${post.title}</li>`;
+                    });
+                    document.body.innerHTML += output;
+                }, 1000);
+            }
+
+            function createPost(error=false) {
+                let post = {title: 'Post 3', body: 'This is post 3 body'}
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        posts.push(post);
+
+                        if(!error) {
+                            resolve();
+                        } else {
+                            reject('Error: Something went wrong.');
+                        }
+                    }, 2000);
+                });
+            }
+
+            async function init() {
+                await createPost();
+
+                getPost();
+            }
+
+            init()
+        }
+
+        // Async / await/ fetch
+        function asyncAwaitFetchExample() {
+            async function fetchData() {
+                const res = await fetch('https://jsonplaceholder.typicode.com/posts')
+
+                const data = await res.json();
+
+                console.log(data); 
+            }
+
+            fetchData();
+        }
+
+        // callbackExample();
+        // promiseExample();
+        // asyncAwaitExample();
+        // asyncAwaitFetchExample();
+    </script>
+</body>
+</html>
